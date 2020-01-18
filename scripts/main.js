@@ -32,6 +32,7 @@
 
     function updateLoginState() {
         var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
         xhr.open('GET', API_HOST + '/user');
         xhr.onload = function() {
             if (xhr.status === 200) {
