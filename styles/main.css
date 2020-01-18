@@ -32,3 +32,15 @@ body {
 #user-menu {
     min-width:8em;
 }
+
+.avatar {
+    width:1.5em;
+    border-radius:3px;
+    margin-right:0.5em;
+}
+
+#rank-list .rank {
+    font-size:100%;
+    margin-right:1em;
+}
+

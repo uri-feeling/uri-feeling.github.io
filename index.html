@@ -153,9 +153,26 @@
       <main role="main" class="container main-cont" style='display:none' id="main-cont-rank">
         <div class="">
           <h1>기여 순위 보기</h1>
-          <p class="lead"></p>
+          <ul class="list-group" id="rank-list">
+          </ul>
         </div>
       </main>
+
+    <script type="text/html" id="tmp-emotion-btn">
+        <div class="col-12 col-sm-6 col-md-6 col-lg-4 emotion-btn-wrap">
+            <button type="button" class="emotion-btn btn btn-{{css}} btn-lg btn-block" data-value="{{id}}">{{name}}</button>
+        </div>
+    </script>
+
+    <script type="text/html" id="tmp-rank-item">
+        <li class="list-group-item d-flex align-items-center" id='rank-item-{{rank}}'>
+            <span class="rank badge badge-light">{{rank}}</span>
+            <a href='#' class='avatar-link' target='_blank'><img class='avatar' src='./styles/default_avatar.png'></a>
+            <a href='#' class='avatar-link' target='_blank'><span class='user-id'>{{gh_id}}</span></a>
+            
+            <a href='#view/{{user_id}}' class='ml-auto'><span class='contrib-cnt badge badge-primary badge-pill'>{{contrib_cnt}}</span></a>
+        </li>
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

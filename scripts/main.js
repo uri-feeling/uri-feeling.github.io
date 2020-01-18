@@ -5,15 +5,18 @@
      */
     const API_HOST = 'https://uri-feeling.bab2min.pe.kr:8193';
     const EMOTION_LIST = [
-        {id:'happy', name:'기쁨', css:'success'},
+        {id:'unk', name:'모르겠음', css:'warning'},
+        {id:'happy', name:'기쁨/즐거움', css:'success'},
         {id:'sad', name:'슬픔', css:'primary'},
         {id:'angry', name:'분노', css:'danger'},
-        {id:'hate', name:'혐오', css:'dark'},
-        {id:'neutral', name:'중립', css:'info'},
-        {id:'unk', name:'모르겠음', css:'warning'},
+        {id:'hate', name:'혐오/싫음', css:'dark'},
+        {id:'synical', name:'냉소/비꼼', css:'secondary'},
+        {id:'sorry', name:'미안함', css:'warning'},
         {id:'info', name:'정보', css:'light'},
+        {id:'positive', name:'긍정', css:'success'},
+        {id:'neutral', name:'중립', css:'info'},
+        {id:'negative', name:'부정', css:'danger'},
     ];
-    const EMOTION_BTN_TMP = '<div class="col-12 col-sm-6 col-md-6 col-lg-4 emotion-btn-wrap"><button type="button" class="emotion-btn btn btn-{css} btn-lg btn-block" data-value="{id}">{name}</button></div>';
     const URL_PAT = {
         next_label: ['doc_id'],
         label: ['doc_id'],
@@ -21,6 +24,7 @@
     };
 
     var urlParams = null, loginSession = null;
+    var curDocId = null;
     /**
      * Page Events
      */
@@ -38,6 +42,7 @@
                 var res = JSON.parse(xhr.responseText);
                 $('#label-doc').text(res.content);
                 urlParams = {page:'label', doc_id:res.doc_id};
+                curDocId = res.doc_id;
                 history.replaceState(urlParams, urlParams.page, toURLParam(urlParams));
                 onUpdateState();
             } else {
@@ -48,12 +53,35 @@
     };
 
     onPageLoad.label = function() {
-        if(!$('#label-doc').text().trim()) {
+        if(curDocId != urlParams.doc_id) {
             urlParams.page = 'next_label';
             $('.main-cont').hide();
             $('#main-cont-next_label').show();
             onPageLoad[urlParams.page](urlParams);
         }
+    };
+
+    onPageLoad.rank = function() {
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.open('GET', API_HOST + '/rank');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var res = JSON.parse(xhr.responseText);
+                $('#rank-list').html('');
+                for(var i in res.users) {
+                    var vals = res.users[i];
+                    vals.contrib_cnt = numberWithCommas(vals.contrib_total);
+                    vals.rank = (i|0) + 1;
+                    $('#rank-list').append($(fillTemplate('#tmp-rank-item', vals)));
+                    var rid = '#rank-item-' + ((i|0)+1);
+                    updateAvatar(vals.gh_id, $(rid + ' .avatar'), $(rid + ' .avatar-link'));
+                }
+            } else {
+                
+            }
+        };
+        xhr.send();
     };
 
     $('#emotion-list').on('click', '.emotion-btn', function(){
@@ -105,15 +133,17 @@
         return '?' + s;
     }
 
-    function fillTemplate(tmp, values) {
+    function fillTemplate(tmp_id, values) {
+        var tmp = $(tmp_id).html();
         for(var k in values) {
-            tmp = tmp.split('{' + k + '}').join(values[k]);
+            tmp = tmp.split('{{' + k + '}}').join(values[k]);
         }
         return tmp;
     }
 
     function onUpdateState() {
         var page = urlParams['page'] || 'home';
+        $('#main-nav').removeClass('show');
         $('.main-cont').hide();
         $('#main-cont-' + page).show();
         if(onPageLoad[page]) onPageLoad[page]();
@@ -126,6 +156,7 @@
         xhr.onload = function() {
             if (xhr.status === 200) {
                 loginSession = JSON.parse(xhr.responseText);
+                updateGHInfo();
                 $('#user-menu').text(loginSession.gh_id);
                 $('#user-menu-my-view').attr('href', '#view/' + loginSession.gh_id);
                 $('#btn-login').hide();
@@ -139,12 +170,43 @@
         xhr.send();
     }
 
+    function updateGHInfo() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://api.github.com/users/' + loginSession.gh_id);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                loginSession.gh_info = JSON.parse(xhr.responseText);
+                $('#user-menu').prepend($('<img>').attr('src', loginSession.gh_info.avatar_url).addClass('avatar'));
+            } else {
+            }
+        };
+        xhr.send();
+    }
+
+    function updateAvatar(gh_id, img_element, link_element) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://api.github.com/users/' + gh_id);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var res = JSON.parse(xhr.responseText);
+                if(img_element) img_element.attr('src', res.avatar_url);
+                if(link_element) link_element.attr('href', res.html_url);
+            } else {
+            }
+        };
+        xhr.send();
+    }
+
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     /**
      * Initializing
      */
     $(function(){
         for(var i in EMOTION_LIST) {
-            $('#emotion-list').append($(fillTemplate(EMOTION_BTN_TMP, EMOTION_LIST[i])));
+            $('#emotion-list').append($(fillTemplate('#tmp-emotion-btn', EMOTION_LIST[i])));
         }
 
         $('body').on('click', 'a', function(e){
