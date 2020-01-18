@@ -30,9 +30,9 @@
           </ul>
           <a class="btn btn-outline-success my-2 my-sm-0" href="https://uri-feeling.bab2min.pe.kr:8193/login" id='btn-login'>로그인</a>
           <div class="dropdown" id='btn-logout' style='display:none'>
-            <a class="btn btn-outline-success my-2 my-sm-0 dropdown-toggle" href="#" id="user-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">bab2min</a>
+            <a class="btn btn-outline-success my-2 my-sm-0 dropdown-toggle" href="#" id="user-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
             <div class="dropdown-menu" aria-labelledby="user-menu">
-                <a class="dropdown-item" href="#start/bab2min">내 라벨링</a>
+                <a class="dropdown-item" href="#view/bab2min" id='user-menu-my-view'>내 라벨링</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="https://uri-feeling.bab2min.pe.kr:8193/logout">로그아웃</a>
             </div>
@@ -121,9 +121,29 @@
       <main role="main" class="container main-cont" style='display:none' id="main-cont-start">
         <div class="">
           <h1>라벨링 시작하기</h1>
-          <p class="lead"></p>
+          <p class="lead">
+            <a class="btn btn-outline-success my-2 my-sm-0" href="#tutorial">연습해보기</a>
+            <a class="btn btn-outline-success my-2 my-sm-0" href="#next_label">시작하기</a>
+          </p>
         </div>
       </main>
+        <main role="main" class="container main-cont" style='display:none' id="main-cont-next_label">
+            <div class="d-flex align-items-center">
+                <strong>로딩 중...</strong>
+                <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
+            </div>
+        </main>
+        <main role="main" class="container main-cont" style='display:none' id="main-cont-label">
+        <div class="">
+            <p class="lead">다음 문장에서 드러나는 감정으로 적절한 것을 선택해주세요.</p>
+            <div class="card doc-cont-view">
+                <div class="card-body" id="label-doc">
+                </div>
+            </div>
+            <div class="row" id="emotion-list">
+            </div>
+        </div>
+        </main>
       <main role="main" class="container main-cont" style='display:none' id="main-cont-view">
         <div class="">
           <h1>라벨링 결과 보기</h1>

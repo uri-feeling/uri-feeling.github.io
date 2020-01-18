@@ -1,3 +1,7 @@
+html, body {
+    background-color: #eee;
+}
+
 body {
     font-family: 'Noto Serif KR', serif;
 }
@@ -7,5 +11,24 @@ body {
 }
 
 .main-cont {
-    padding-top:75px;
+    background-color: #fff;
+    padding:75px 30px;
+}
+
+.emotion-btn-wrap {
+    margin:0.5em 0;
+    padding:0 2.5em;
+}
+
+.emotion-btn {
+    padding-top:1em;
+    padding-bottom:1em;
+}
+
+.doc-cont-view {
+    margin:2em 0;
+}
+
+#user-menu {
+    min-width:8em;
 }
