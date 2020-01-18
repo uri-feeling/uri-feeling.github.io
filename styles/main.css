@@ -1,0 +1,11 @@
+body {
+    font-family: 'Noto Serif KR', serif;
+}
+
+.bg-purple {
+    background-color: #6f42c1;
+}
+
+.main-cont {
+    padding-top:75px;
+}
