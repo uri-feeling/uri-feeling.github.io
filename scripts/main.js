@@ -13,6 +13,9 @@
         {id:'synical', name:'냉소/비꼼', css:'secondary'},
         {id:'sorry', name:'미안함', css:'warning'},
         {id:'info', name:'정보', css:'light'},
+    ];
+    const POLARITY_LIST = [
+        {id:'unk', name:'모르겠음', css:'warning'},
         {id:'positive', name:'긍정', css:'success'},
         {id:'neutral', name:'중립', css:'info'},
         {id:'negative', name:'부정', css:'danger'},
@@ -24,7 +27,7 @@
     };
 
     var urlParams = null, loginSession = null;
-    var curDocId = null;
+    var curDocId = null, selectedPolarity = null;
     /**
      * Page Events
      */
@@ -44,6 +47,8 @@
                 urlParams = {page:'label', doc_id:res.doc_id};
                 curDocId = res.doc_id;
                 history.replaceState(urlParams, urlParams.page, toURLParam(urlParams));
+                $('#main-cont-label .emotion').hide();
+                $('#main-cont-label .polarity').show();
                 onUpdateState();
             } else {
                 
@@ -84,6 +89,14 @@
         xhr.send();
     };
 
+    $('#polarity-list').on('click', '.emotion-btn', function(){
+        if(!urlParams.doc_id) return;
+
+        selectedPolarity = $(this).attr('data-value');
+        $('#main-cont-label .emotion').show();
+        $('#main-cont-label .polarity').hide();
+    });
+
     $('#emotion-list').on('click', '.emotion-btn', function(){
         if(!urlParams.doc_id) return;
         if(!loginSession) {
@@ -105,7 +118,7 @@
                 
             }
         };
-        xhr.send(encodeURI('emotion=' + data));
+        xhr.send(encodeURI('emotion=' + data + '&polarity=' + selectedPolarity));
     });
 
     (window.onpopstate = function () {
@@ -205,6 +218,10 @@
      * Initializing
      */
     $(function(){
+        for(var i in POLARITY_LIST) {
+            $('#polarity-list').append($(fillTemplate('#tmp-emotion-btn', POLARITY_LIST[i])));
+        }
+
         for(var i in EMOTION_LIST) {
             $('#emotion-list').append($(fillTemplate('#tmp-emotion-btn', EMOTION_LIST[i])));
         }

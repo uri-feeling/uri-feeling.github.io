@@ -11,7 +11,7 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand" href="#">우리느낌</a>
+        <a class="navbar-brand" href="/">우리느낌</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -135,12 +135,15 @@
         </main>
         <main role="main" class="container main-cont" style='display:none' id="main-cont-label">
         <div class="">
-            <p class="lead">다음 문장에서 드러나는 감정으로 적절한 것을 선택해주세요.</p>
+            <p class="lead polarity">다음 문장에서 드러나는 극성으로 적절한 것을 선택해주세요.</p>
+            <p class="lead emotion">다음 문장에서 드러나는 감정으로 적절한 것을 선택해주세요.</p>
             <div class="card doc-cont-view">
                 <div class="card-body" id="label-doc">
                 </div>
             </div>
-            <div class="row" id="emotion-list">
+            <div class="row polarity" id="polarity-list">
+            </div>
+            <div class="row emotion" id="emotion-list">
             </div>
         </div>
         </main>
