@@ -150,7 +150,25 @@
       <main role="main" class="container main-cont" style='display:none' id="main-cont-view">
         <div class="">
           <h1>라벨링 결과 보기</h1>
-          <p class="lead"></p>
+          <h2 id="view-user-name">
+            <a href='#' class='avatar-link' target='_blank'><img class='avatar' src='./styles/default_avatar.png'></a>
+            <a href='#' class='avatar-link' target='_blank'><span class='user-id'></span></a>
+            님의 라벨링 결과
+          </h2>
+          <table class='table' id="view-list">
+            <thead>
+              <tr>
+                <th class='cont'>본문</th>
+                <th class='polarity'>극성</th>
+                <th class='emotion'>감정</th>
+                <th class='time'>일시</th>
+                <th class='del'></th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
         </div>
       </main>
       <main role="main" class="container main-cont" style='display:none' id="main-cont-rank">
@@ -160,6 +178,44 @@
           </ul>
         </div>
       </main>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="delete-dlg" tabindex="-1" role="dialog" aria-labelledby="delete-dlg-label" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="delete-dlg-label">철회</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            라벨링을 철회하시겠습니까? 되돌릴 수 없습니다.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+            <button type="button" class="btn btn-danger delete-btn-ok">철회</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/html" id="tmp-view-item">
+        <tr data-value="{{doc_id}}">
+          <td class='cont'>{{content}}</td>
+          <td class='polarity'><p class='badge badge-{{polarity_class}}'>{{polarity_name}}</p></td>
+          <td class='emotion'><p class='badge badge-{{emotion_class}}'>{{emotion_name}}</p></td>
+          <td class='time'>{{time}}</td>
+          <td class='del'>
+            <button type="button" class="btn btn-danger btn-sm delete" data-toggle="modal" data-target="#delete-dlg">
+              <svg class="bi bi-trash-fill" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M4.5 3a1 1 0 00-1 1v1a1 1 0 001 1H5v9a2 2 0 002 2h6a2 2 0 002-2V6h.5a1 1 0 001-1V4a1 1 0 00-1-1H12a1 1 0 00-1-1H9a1 1 0 00-1 1H4.5zm3 4a.5.5 0 01.5.5v7a.5.5 0 01-1 0v-7a.5.5 0 01.5-.5zM10 7a.5.5 0 01.5.5v7a.5.5 0 01-1 0v-7A.5.5 0 0110 7zm3 .5a.5.5 0 00-1 0v7a.5.5 0 001 0v-7z" clip-rule="evenodd"></path>
+              </svg>
+            </button>
+          </td>
+        </tr>
+    </script>
 
     <script type="text/html" id="tmp-emotion-btn">
         <div class="col-12 col-sm-6 col-md-6 col-lg-4 emotion-btn-wrap">

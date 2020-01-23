@@ -20,14 +20,24 @@
         {id:'neutral', name:'중립', css:'info'},
         {id:'negative', name:'부정', css:'danger'},
     ];
+    const EMOTION_DICT = {};
+    const POLARITY_DICT = {};
     const URL_PAT = {
         next_label: ['doc_id'],
         label: ['doc_id'],
         view: ['user_id', 'doc_id'],
     };
 
+    for(var i in EMOTION_LIST) {
+        EMOTION_DICT[EMOTION_LIST[i].id] = EMOTION_LIST[i];
+    }
+    for(var i in POLARITY_LIST) {
+        POLARITY_DICT[POLARITY_LIST[i].id] = POLARITY_LIST[i];
+    }
+
     var urlParams = null, loginSession = null;
     var curDocId = null, selectedPolarity = null;
+    var selectedDocId = null;
     /**
      * Page Events
      */
@@ -89,6 +99,43 @@
         xhr.send();
     };
 
+    onPageLoad.view = function(){
+        var xhr1 = new XMLHttpRequest();
+        xhr1.withCredentials = true;
+        xhr1.open('GET', API_HOST + '/user/' + urlParams.user_id);
+        xhr1.onload = function() {
+            if (xhr1.status === 200) {
+                var res = JSON.parse(xhr1.responseText);
+                if(!res.gh_id) return;
+                $('#view-user-name .user-id').text(res.gh_id);
+                updateAvatar(res.gh_id, $('#view-user-name .avatar'), $('#view-user-name .avatar-link'));
+            } else {
+            }
+        };
+        xhr1.send();
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.open('GET', API_HOST + '/view/' + urlParams.user_id);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var res = JSON.parse(xhr.responseText);
+                $('#view-list tbody').html('');
+                for(var i in res.docs) {
+                    var vals = res.docs[i];
+                    vals.polarity_class = POLARITY_DICT[vals.polarity].css;
+                    vals.polarity_name = POLARITY_DICT[vals.polarity].name;
+                    vals.emotion_class = EMOTION_DICT[vals.emotion].css;
+                    vals.emotion_name = EMOTION_DICT[vals.emotion].name;
+                    $('#view-list tbody').append($(fillTemplate('#tmp-view-item', vals)));
+                }
+            } else {
+                
+            }
+        };
+        xhr.send();
+    };
+
     $('#polarity-list').on('click', '.emotion-btn', function(){
         if(!urlParams.doc_id) return;
 
@@ -119,6 +166,28 @@
             }
         };
         xhr.send(encodeURI('emotion=' + data + '&polarity=' + selectedPolarity));
+    });
+
+    $('#view-list').on('click', '.delete', function(){
+        selectedDocId = $(this).parents('tr').attr('data-value');
+    });
+
+    $('#delete-dlg .delete-btn-ok').click(function(){
+        if(selectedDocId) {
+            var doc_id_deleted = selectedDocId;
+            var xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+            xhr.open('POST', API_HOST + '/doc/' + selectedDocId);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    $('#view-list tr[data-value="' + doc_id_deleted + '"]').remove();
+                } else {
+                }
+            };
+            xhr.send(encodeURI('delete=1'));
+        }
+        $('#delete-dlg').modal('hide');
     });
 
     (window.onpopstate = function () {

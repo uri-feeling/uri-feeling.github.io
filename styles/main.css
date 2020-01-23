@@ -44,3 +44,25 @@ body {
     margin-right:1em;
 }
 
+#view-list th {
+    text-align:center;
+}
+
+#view-list .badge {
+    font-size:85%;
+}
+
+#view-list .polarity, #view-list .emotion {
+    min-width:4em;
+    text-align:center;
+}
+
+#view-list .time {
+    min-width:8em;
+    text-align:center;
+}
+
+#view-list .del button {
+    font-size:150%;
+    padding:0;
+}
